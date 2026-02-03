@@ -11,3 +11,9 @@ def index():
         <input id="url" name="url" type="text">
         <input type="submit" value="submit">
         </form>"""
+
+@app.post("/add-article")
+def add_article():
+    url = request.form['url']
+    print(url)
+    return redirect(url_for('index'))
