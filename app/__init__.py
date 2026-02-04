@@ -9,4 +9,6 @@ def create_app():
     os.makedirs(app.instance_path, exist_ok=True)
     from . import db
     db.init_app(app)
+    from . import routes
+    app.register_blueprint(routes.bp)
     return app
