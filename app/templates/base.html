@@ -4,9 +4,10 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>I Read This</title>
-		<link href="css/style.css" rel="stylesheet">
+	<link href="{{url_for('static', filename='style.css')}}" rel="stylesheet">
 	</head>
 	<body>
+<h1>I Read This</h1>
         <form method="POST" action="/add-article">
         <label for="url">Article url:</label>
         <input id="url" name="url" type="text">
@@ -14,7 +15,7 @@
         </form>
 		<ul>
 			{% for link in links %}
-			<li><p>{{link['url']}} - {{ link['added_at']}}</li>
+			<li><p><a href="{{ link['url'] }}">{{ link['url'] }}</a> - {{ link['added_at']}}</li>
 			{% endfor %}
 		</ul>
 	</body>
