@@ -20,3 +20,12 @@ def add_article():
     db.commit()
     return redirect(url_for('routes.index'))
 
+@bp.get("/archive/<int:id>"
+def archive_page(id):
+        db = get_db()
+        page = db.execute("SELECT content FROM pages WHERE id = ?", [id]).fetchone()
+        if page is not None:
+            return page
+        else:
+            abort(404)
+
