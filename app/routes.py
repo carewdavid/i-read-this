@@ -9,7 +9,7 @@ bp = Blueprint('routes', __name__)
 @bp.route("/")
 def index():
     db = get_db()
-    links = db.execute("SELECT url, added_at FROM links ORDER BY added_at DESC").fetchall()
+    links = db.execute("SELECT id, url, added_at FROM links ORDER BY added_at DESC").fetchall()
     return render_template("base.html", links=links)
 
 @bp.post("/add-article")
@@ -21,7 +21,7 @@ def add_article():
     db.commit()
     return redirect(url_for('routes.index'))
 
-@bp.get("/archive/<int:id>"
+@bp.get("/archive/<int:id>")
 def archive_page(id):
         db = get_db()
         page = db.execute("SELECT content FROM pages WHERE id = ?", [id]).fetchone()
