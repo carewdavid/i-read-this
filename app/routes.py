@@ -36,7 +36,7 @@ def archive_page(id):
             page = requests.get(url)
             if page.status_code != 200:
                 mark_bad_link(id)
-            db.execute("INSERT INTO pages (id, url, content) VALUES(?, ?, ?)", [id, url, page])
+            db.execute("INSERT INTO pages (id, url, content) VALUES(?, ?, ?)", [id, url, page.text])
             db.commit()
 
                 
