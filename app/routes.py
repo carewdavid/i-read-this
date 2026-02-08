@@ -1,6 +1,7 @@
 from flask import (
     Blueprint, g, redirect, url_for, request, render_template
 )
+import requests
 from app.db import get_db
 
 bp = Blueprint('routes', __name__)
@@ -27,5 +28,12 @@ def archive_page(id):
         if page is not None:
             return page
         else:
-            abort(404)
+            url = db.execute("SELECT url FROM links WHERE id = ?", [id]).fetchone()
+            if url is None:
+                abort(404)
+            page = requests.get(url)
+            db.execute("INSERT INTO pages (id, url, content) VALUES(?, ?, ?)", [id, url, page])
+            db.commit()
+
+                
 
