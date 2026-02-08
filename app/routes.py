@@ -33,13 +33,13 @@ def archive_page(id):
                 abort(404)
             #Unpack url value from database row
             url = url['url']
-            page = requests.get(url)
+            page = requests.get(url, headers={'user-agent': 'https://github.com/carewdavid/i-read-this'})
             if page.status_code != 200:
                 mark_bad_link(id)
                 abort(404)
             db.execute("INSERT INTO pages (id, url, content) VALUES(?, ?, ?)", [id, url, page.text])
             db.commit()
-            return page['content']
+            return page.text
 
                 
 def mark_bad_link(id):
