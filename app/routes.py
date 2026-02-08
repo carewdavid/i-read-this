@@ -26,11 +26,13 @@ def archive_page(id):
         db = get_db()
         page = db.execute("SELECT content FROM pages WHERE id = ?", [id]).fetchone()
         if page is not None:
-            return page
+            return page['content']
         else:
             url = db.execute("SELECT url FROM links WHERE id = ?", [id]).fetchone()
             if url is None:
                 abort(404)
+            #Unpack url value from database row
+            url = url['url']
             page = requests.get(url)
             db.execute("INSERT INTO pages (id, url, content) VALUES(?, ?, ?)", [id, url, page])
             db.commit()
