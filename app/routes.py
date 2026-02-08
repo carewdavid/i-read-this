@@ -34,8 +34,13 @@ def archive_page(id):
             #Unpack url value from database row
             url = url['url']
             page = requests.get(url)
+            if page.status_code != 200:
+                mark_bad_link(id)
             db.execute("INSERT INTO pages (id, url, content) VALUES(?, ?, ?)", [id, url, page])
             db.commit()
 
                 
-
+def mark_bad_link(id):
+    db = get_db()
+    db.execute("UPDATE links set is_live = FALSE WHERE id = ?", [id])
+    db.commit()
