@@ -39,6 +39,7 @@ def archive_page(id):
                 abort(404)
             db.execute("INSERT INTO pages (id, url, content) VALUES(?, ?, ?)", [id, url, page.text])
             db.commit()
+            return page['content']
 
                 
 def mark_bad_link(id):
