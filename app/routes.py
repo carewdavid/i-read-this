@@ -2,6 +2,7 @@ from flask import (
     Blueprint, g, redirect, url_for, request, render_template
 )
 import requests
+from bs4 import BeautifulSoup
 from app.db import get_db
 
 bp = Blueprint('routes', __name__)
@@ -37,6 +38,9 @@ def archive_page(id):
             if page.status_code != 200:
                 mark_bad_link(id)
                 abort(404)
+            soup = BeautifulSoup(page.text)
+            title = soup.title
+            set_title(id, title)
             db.execute("INSERT INTO pages (id, url, content) VALUES(?, ?, ?)", [id, url, page.text])
             db.commit()
             return page.text
@@ -46,3 +50,9 @@ def mark_bad_link(id):
     db = get_db()
     db.execute("UPDATE links set is_live = FALSE WHERE id = ?", [id])
     db.commit()
+
+def set_title(id, title):
+    db = get_db()
+    db.execute("UPDATE links set title = ? WHERE id = ?", [title, id])
+    db.commit()
+
