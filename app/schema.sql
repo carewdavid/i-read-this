@@ -2,6 +2,7 @@ create table if not exists links(
 	id integer primary key autoincrement,
 	url text not null,
 	added_at timestamp default current_timestamp,
+	title text
 	is_live boolean);
 
 create table if not exists pages(
