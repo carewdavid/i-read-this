@@ -9,7 +9,7 @@ bp = Blueprint('routes', __name__)
 @bp.route("/")
 def index():
     db = get_db()
-    links = db.execute("SELECT id, url, added_at FROM links ORDER BY added_at DESC").fetchall()
+    links = db.execute("SELECT id, title, url, added_at FROM links ORDER BY added_at DESC").fetchall()
     return render_template("base.html", links=links)
 
 @bp.post("/add-article")
