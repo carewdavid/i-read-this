@@ -40,7 +40,7 @@ def archive_page(id):
                 abort(404)
             soup = BeautifulSoup(page.text)
             title = soup.title
-            set_title(id, title)
+            set_title(id, str(title.string))
             db.execute("INSERT INTO pages (id, url, content) VALUES(?, ?, ?)", [id, url, page.text])
             db.commit()
             return page.text
