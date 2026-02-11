@@ -38,7 +38,7 @@ def archive_page(id):
             if page.status_code != 200:
                 mark_bad_link(id)
                 abort(404)
-            soup = BeautifulSoup(page.text)
+            soup = BeautifulSoup(page.text, 'html.parser')
             title = soup.title
             set_title(id, str(title.string))
             db.execute("INSERT INTO pages (id, url, content) VALUES(?, ?, ?)", [id, url, page.text])
