@@ -34,7 +34,7 @@ def archive_page(id):
                 abort(404)
             #Unpack url value from database row
             url = url['url']
-            page = requests.get(url, headers={'user-agent': 'https://github.com/carewdavid/i-read-this'})
+            page = download_page(url)
             if page.status_code != 200:
                 mark_bad_link(id)
                 abort(404)
@@ -44,8 +44,9 @@ def archive_page(id):
             db.execute("INSERT INTO pages (id, url, content) VALUES(?, ?, ?)", [id, url, page.text])
             db.commit()
             return page.text
-
-                
+def download_page(url):
+    page = requests.get(url, headers={'user-agent': 'https://github.com/carewdavid/i-read-this'})
+    return page
 def mark_bad_link(id):
     db = get_db()
     db.execute("UPDATE links set is_live = FALSE WHERE id = ?", [id])
