@@ -38,12 +38,15 @@ def archive_page(id):
             if page.status_code != 200:
                 mark_bad_link(id)
                 abort(404)
-            soup = BeautifulSoup(page.text, 'html.parser')
-            title = soup.title
-            set_title(id, str(title.string))
+            title = parse_title(page)
+            set_title(id, str(title))
             db.execute("INSERT INTO pages (id, url, content) VALUES(?, ?, ?)", [id, url, page.text])
             db.commit()
             return page.text
+def parse_title(page):
+    soup = BeautifulSoup(page.text, 'html.parser')
+    title = soup.title.string
+    return title
 def download_page(url):
     page = requests.get(url, headers={'user-agent': 'https://github.com/carewdavid/i-read-this'})
     return page
